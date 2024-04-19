@@ -18,6 +18,7 @@ fn setup(
     commands.spawn((
         PbrBundle {
             mesh: meshes.add(Plane3d::default().mesh().size(80.0, 80.0)),
+            material: materials.add(Color::GRAY),
             ..default()
         },
         Ground,
