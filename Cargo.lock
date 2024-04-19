@@ -718,6 +718,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy_mod_raycast"
+version = "0.17.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9ca646aeaab4a170e1f3e8284b925e2f990eb18616e95d7826c873c8e26ee945"
+dependencies = [
+ "bevy_app",
+ "bevy_asset",
+ "bevy_derive",
+ "bevy_ecs",
+ "bevy_gizmos",
+ "bevy_math",
+ "bevy_reflect",
+ "bevy_render",
+ "bevy_sprite",
+ "bevy_transform",
+ "bevy_utils",
+ "bevy_window",
+ "crossbeam-channel",
+]
+
+[[package]]
 name = "bevy_pbr"
 version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -834,6 +855,16 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.60",
+]
+
+[[package]]
+name = "bevy_rts_camera"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "422e8f59fa55812261d252927a923f70946c07d5f5a6362745854db6ba604bb4"
+dependencies = [
+ "bevy",
+ "bevy_mod_raycast",
 ]
 
 [[package]]
@@ -2887,6 +2918,7 @@ name = "rts"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "bevy_rts_camera",
 ]
 
 [[package]]
