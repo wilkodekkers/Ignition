@@ -1,10 +1,16 @@
+use bevy::math::vec3;
 use bevy::prelude::*;
-use bevy_rts_camera::{Ground, RtsCamera, RtsCameraControls, RtsCameraPlugin};
-
+use bevy::render::mesh::PlaneMeshBuilder;
+use bevy_mod_picking::{DefaultPickingPlugins, PickableBundle};
+use bevy_mod_picking::events::{Drag, Pointer};
+use bevy_mod_picking::prelude::On;
+use bevy_rts_camera::{RtsCamera, RtsCameraControls, RtsCameraPlugin};
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, RtsCameraPlugin))
+        .add_plugins(DefaultPlugins)
+        .add_plugins(RtsCameraPlugin)
+        .add_plugins(DefaultPickingPlugins)
         .add_systems(Startup, setup)
         .run();
 }
@@ -17,19 +23,29 @@ fn setup(
     // ground
     commands.spawn((
         PbrBundle {
-            mesh: meshes.add(Plane3d::default().mesh().size(80.0, 80.0)),
-            material: materials.add(Color::GRAY),
+            mesh: meshes.add(PlaneMeshBuilder {
+                half_size: Vec2::splat(2.5),
+                ..default()
+            }),
+            material: materials.add(Color::rgb(0.3, 0.5, 0.3)),
             ..default()
         },
-        Ground,
     ));
     // cube
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(Cuboid::new(1.0, 1.0, 1.0)),
-        material: materials.add(Color::rgb_u8(124, 144, 255)),
-        transform: Transform::from_xyz(0.0, 0.5, 0.0),
-        ..default()
-    });
+    commands.spawn((
+        PbrBundle {
+            mesh: meshes.add(Cuboid::new(1.0, 1.0, 1.0)),
+            material: materials.add(Color::rgb_u8(124, 144, 255)),
+            transform: Transform::from_xyz(0.0, 0.5, 0.0),
+            ..default()
+        },
+        PickableBundle::default(),
+        On::<Pointer<Drag>>::target_component_mut::<Transform>(|drag, transform| {
+            println!("{}", drag.pointer_location.position);
+            let normalized = drag.pointer_location.position.normalize();
+            transform.translation = vec3(normalized.x, 0.0, normalized.y);
+        })
+    ));
     // light
     commands.spawn(PointLightBundle {
         point_light: PointLight {
