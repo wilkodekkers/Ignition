@@ -1,16 +1,20 @@
+mod plugins;
+
 use bevy::math::vec3;
 use bevy::prelude::*;
 use bevy::render::mesh::PlaneMeshBuilder;
 use bevy_mod_picking::{DefaultPickingPlugins, PickableBundle};
 use bevy_mod_picking::events::{Drag, Pointer};
 use bevy_mod_picking::prelude::On;
-use bevy_rts_camera::{RtsCamera, RtsCameraControls, RtsCameraPlugin};
+use bevy_rts_camera::{Ground, RtsCamera, RtsCameraControls, RtsCameraPlugin};
+use crate::plugins::draw_cursor_plugin::DrawCursorPlugin;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugins(RtsCameraPlugin)
         .add_plugins(DefaultPickingPlugins)
+        .add_plugins(DrawCursorPlugin)
         .add_systems(Startup, setup)
         .run();
 }
@@ -24,12 +28,13 @@ fn setup(
     commands.spawn((
         PbrBundle {
             mesh: meshes.add(PlaneMeshBuilder {
-                half_size: Vec2::splat(2.5),
+                half_size: Vec2::splat(100.0),
                 ..default()
             }),
             material: materials.add(Color::rgb(0.3, 0.5, 0.3)),
             ..default()
         },
+        Ground,
     ));
     // cube
     commands.spawn((
