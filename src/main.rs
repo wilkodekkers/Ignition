@@ -1,13 +1,11 @@
-mod plugins;
-
-use bevy::math::vec3;
 use bevy::prelude::*;
 use bevy::render::mesh::PlaneMeshBuilder;
 use bevy_mod_picking::{DefaultPickingPlugins, PickableBundle};
-use bevy_mod_picking::events::{Drag, Pointer};
-use bevy_mod_picking::prelude::On;
 use bevy_rts_camera::{Ground, RtsCamera, RtsCameraControls, RtsCameraPlugin};
+
 use crate::plugins::draw_cursor_plugin::DrawCursorPlugin;
+
+mod plugins;
 
 fn main() {
     App::new()
@@ -45,11 +43,6 @@ fn setup(
             ..default()
         },
         PickableBundle::default(),
-        On::<Pointer<Drag>>::target_component_mut::<Transform>(|drag, transform| {
-            println!("{}", drag.pointer_location.position);
-            let normalized = drag.pointer_location.position.normalize();
-            transform.translation = vec3(normalized.x, 0.0, normalized.y);
-        })
     ));
     // light
     commands.spawn(PointLightBundle {
