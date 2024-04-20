@@ -1,15 +1,7 @@
 use bevy::prelude::*;
 use bevy_rts_camera::Ground;
 
-pub struct DrawCursorPlugin;
-
-impl Plugin for DrawCursorPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Update, draw_cursor);
-    }
-}
-
-fn draw_cursor(
+pub fn draw_cursor(
     camera_query: Query<(&Camera, &GlobalTransform)>,
     ground_query: Query<&GlobalTransform, With<Ground>>,
     windows: Query<&Window>,
