@@ -2,10 +2,12 @@ mod events;
 mod game;
 mod main_menu;
 mod systems;
+mod splash;
 
 use game::*;
 use main_menu::*;
 use systems::*;
+use splash::*;
 
 use bevy::prelude::*;
 
@@ -15,6 +17,7 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .init_state::<AppState>()
         // My Plugins
+        .add_plugins(SplashPlugin)
         .add_plugins(MainMenuPlugin)
         .add_plugins(GamePlugin)
         // Systems
@@ -29,7 +32,7 @@ fn main() {
 #[derive(States, Debug, Clone, Eq, PartialEq, Hash, Default)]
 pub enum AppState {
     #[default]
-    MainMenu,
-    InGame,
-    GameOver,
+    Splash,
+    Menu,
+    Game,
 }

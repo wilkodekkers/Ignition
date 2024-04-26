@@ -29,7 +29,7 @@ impl Plugin for GamePlugin {
             .add_plugins(EnemyPlugin)
             .add_plugins(CursorPlugin)
             // Systems
-            .add_systems(Update, toggle_simulation.run_if(in_state(AppState::InGame)));
+            .add_systems(Update, toggle_simulation.run_if(in_state(AppState::Game)));
     }
 }
 
