@@ -46,8 +46,8 @@ pub fn transistion_to_game_state(
     mut next_state: ResMut<NextState<AppState>>,
 ) {
     if keyboard_input.just_pressed(KeyCode::KeyG) {
-        if state.get() != &AppState::InGame {
-            next_state.set(AppState::InGame);
+        if state.get() != &AppState::Game {
+            next_state.set(AppState::Game);
             println!("Transitioning to InGame");
         }
     }
@@ -60,8 +60,8 @@ pub fn transistion_to_main_menu_state(
     mut next_simulation_state: ResMut<NextState<SimulationState>>,
 ) {
     if keyboard_input.just_pressed(KeyCode::KeyM) {
-        if state.get() != &AppState::MainMenu {
-            next_state.set(AppState::MainMenu);
+        if state.get() != &AppState::Menu {
+            next_state.set(AppState::Menu);
             next_simulation_state.set(SimulationState::Paused);
             println!("Transitioning to MainMenu");
         }
@@ -74,5 +74,11 @@ pub fn exit_game(
 ) {
     if keyboard_input.just_pressed(KeyCode::Escape) {
         app_exit_event_write.send(AppExit);
+    }
+}
+
+pub fn despawn_screen<T: Component>(to_despawn: Query<Entity, With<T>>, mut commands: Commands) {
+    for entity in &to_despawn {
+        commands.entity(entity).despawn_recursive();
     }
 }
