@@ -1,26 +1,35 @@
-mod cursor;
-pub mod enemy;
-pub mod player;
+mod events;
+mod game;
+mod main_menu;
 mod systems;
 
-use crate::cursor::CursorPlugin;
-use crate::player::PlayerPlugin;
-use crate::enemy::EnemyPlugin;
-
+use game::*;
+use main_menu::*;
 use systems::*;
 
 use bevy::prelude::*;
-use bevy_mod_picking::DefaultPickingPlugins;
-use bevy_rts_camera::RtsCameraPlugin;
 
 fn main() {
     App::new()
+        // Bevy Plugins
         .add_plugins(DefaultPlugins)
-        .add_plugins(RtsCameraPlugin)
-        .add_plugins(DefaultPickingPlugins)
-        .add_plugins(PlayerPlugin)
-        .add_plugins(EnemyPlugin)
-        .add_plugins(CursorPlugin)
+        .init_state::<AppState>()
+        // My Plugins
+        .add_plugins(MainMenuPlugin)
+        .add_plugins(GamePlugin)
+        // Systems
+        .add_systems(Update, transistion_to_game_state)
+        .add_systems(Update, transistion_to_main_menu_state)
+        .add_systems(Update, exit_game)
+        // Startup Systems
         .add_systems(Startup, (spawn_camera, spawn_light, spawn_ground).chain())
         .run();
+}
+
+#[derive(States, Debug, Clone, Eq, PartialEq, Hash, Default)]
+pub enum AppState {
+    #[default]
+    MainMenu,
+    InGame,
+    GameOver,
 }

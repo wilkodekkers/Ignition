@@ -1,5 +1,7 @@
-use bevy::{prelude::*, render::mesh::PlaneMeshBuilder};
+use bevy::{app::AppExit, prelude::*, render::mesh::PlaneMeshBuilder};
 use bevy_rts_camera::{Ground, RtsCamera, RtsCameraControls};
+
+use crate::{AppState, SimulationState};
 
 pub fn spawn_ground(
     mut commands: Commands,
@@ -36,4 +38,41 @@ pub fn spawn_camera(mut commands: Commands) {
         RtsCamera::default(),
         RtsCameraControls::default(),
     ));
+}
+
+pub fn transistion_to_game_state(
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+    state: Res<State<AppState>>,
+    mut next_state: ResMut<NextState<AppState>>,
+) {
+    if keyboard_input.just_pressed(KeyCode::KeyG) {
+        if state.get() != &AppState::InGame {
+            next_state.set(AppState::InGame);
+            println!("Transitioning to InGame");
+        }
+    }
+}
+
+pub fn transistion_to_main_menu_state(
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+    state: Res<State<AppState>>,
+    mut next_state: ResMut<NextState<AppState>>,
+    mut next_simulation_state: ResMut<NextState<SimulationState>>,
+) {
+    if keyboard_input.just_pressed(KeyCode::KeyM) {
+        if state.get() != &AppState::MainMenu {
+            next_state.set(AppState::MainMenu);
+            next_simulation_state.set(SimulationState::Paused);
+            println!("Transitioning to MainMenu");
+        }
+    }
+}
+
+pub fn exit_game(
+    keyboard_input: Res<ButtonInput<KeyCode>>,
+    mut app_exit_event_write: EventWriter<AppExit>,
+) {
+    if keyboard_input.just_pressed(KeyCode::Escape) {
+        app_exit_event_write.send(AppExit);
+    }
 }
