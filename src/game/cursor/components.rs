@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
-#[derive(Component, Debug)]
+#[derive(Component)]
 pub struct SelectionStartPosition {
-    pub(crate) x: i32,
-    pub(crate) y: i32
+    pub(crate) x: f32,
+    pub(crate) y: f32
 }
