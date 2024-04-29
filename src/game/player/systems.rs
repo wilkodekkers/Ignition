@@ -1,18 +1,28 @@
 use bevy::prelude::*;
 use bevy_mod_picking::PickableBundle;
 
-use super::components::Player;
+use super::components::{Player, Animations};
+
+pub fn run_animation(
+    animations: Res<Animations>,
+    mut player_query: Query<&mut AnimationPlayer, Added<AnimationPlayer>>
+) {
+    for mut player in &mut player_query {
+        player.play(animations.0[0].clone_weak()).repeat();
+    }
+}
 
 pub fn spawn_player(
     mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
+    asset_server: Res<AssetServer>,
 ) {
+    // Init animations
+    commands.insert_resource(Animations(vec![asset_server.load("models/soldier.glb#Animation0")]));
+
+    // Spawn model
     commands.spawn((
-        PbrBundle {
-            mesh: meshes.add(Cuboid::new(1.0, 1.0, 1.0)),
-            material: materials.add(Color::rgb_u8(124, 144, 255)),
-            transform: Transform::from_xyz(0.0, 0.5, 0.0),
+        SceneBundle {
+            scene: asset_server.load("models/soldier.glb#Scene0"),
             ..default()
         },
         PickableBundle::default(),
