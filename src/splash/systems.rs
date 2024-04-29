@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy::render::render_resource::AsBindGroup;
+
 use crate::AppState;
 
 use super::components::{OnSplashScreen, SplashTimer};
